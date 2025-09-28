@@ -1,28 +1,157 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
     <title></title>
 
-    <!-- Latest compiled and minified CSS -->
-    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="../deps/bootstrap.min.css">
+    <style>/* General reset and typography */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #fff;
+}
+h3 {
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+p {
+    margin: 0 0 10px;
+}
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+pre {
+    display: block;
+   cursor: none;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Grid system */
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.row:before,
+.row:after {
+    display: table;
+    content: " ";
+}
+.row:after {
+    clear: both;
+}
+.col-sm-6 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+@media (min-width: 768px) {
+    .col-sm-6 {
+        float: left;
+        width: 50%;
+    }
+}
+
+/* Buttons */
+button,
+input[type="button"],
+input[type="submit"] {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #1a11;
+    color: #313aaa;
+}
+button:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    background-color: aqua;
+    border-color: red;
+  border:yellow solid 2px;
+ 
+}
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* Inputs */
+input[type="file"],
+input[type="radio"] {
+    line-height: normal;
+  appearance: smooth;
+  
+ color:#313aaa;
+    background-color: #1a11;
+    cursor: default;
+}
+input[type="radio"] {
+    margin: 4px 0 0;
+    background-color:red;
+    vertical-align: middle;
+}
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+/* Links */
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+a:hover,
+a:focus {
+    color: #23527c;
+    text-decoration: underline;
+}</style>
 </head>
 <body style="padding: 8px;">
-    <h3>in-browser mp4/webm encoder powered by ffmpeg-*.wasm</h3>
-    <p>
-        <a href="https://github.com/w3reality/async-thread-worker/tree/master/examples/wasm-ffmpeg">source code</a>
-    </p>
+    <h3> | Sid Creative |</h3>
+    
     <hr />
     <div class="row">
         <div class="col-sm-6">
             <div>
                 <div>
-                    <!--
-                        radios - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/radio
-                        input - https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
-                    -->
-                    encode: [ <input style="display: inline;" id=input type=file accept="video/mp4,video/x-m4v,video/*"> ] => output.
+                    
+                    Encode: [ <input style="display: inline;" id=input type=file accept="video/mp4,video/x-m4v,video/*"> ] <br> => output.
                     [
                         <input type="radio" id="outputChoice1" name="output" value="mp4" checked>
                         <label for="outputChoice1">mp4</label>
@@ -38,7 +167,7 @@
             </div>
             <hr />
             <div>
-                developer: <button id="testButton">Convert test.webm (385 KB)</button>
+                Developer: <br><button id="testButton">Convert test.webm (385 KB)</button>
                 <button id="devVersionButton"><code>ffmpeg -version</code></button>
                 <button id="devHelpButton"><code>ffmpeg -help</code></button>
                 <button id="devClearButton">Clear</button>
@@ -47,13 +176,14 @@
             <div id="cancel" style="display: none">
                 ⌛ Encoding... <button id="cancelButton">Cancel</button>
             </div>
+          <div>
+                    <span id="outputName"></span> <button id="downloadButton">Save</button>
+                </div>
             <div id="video" style="display: none">
                 <div>
                     <video id=output autoplay style="width: 100%;" controls></video>
                 </div>
-                <div>
-                    <span id="outputName"></span> <button id="downloadButton">Save</button>
-                </div>
+                
             </div>
         </div>
         <div class="col-sm-6">
