@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
-    <title></title>
+    <title>Sid Creative Mp4 </title>
 
     <style>/* General reset and typography */
 * {
@@ -16,7 +16,8 @@ body {
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
-    background-color: #fff;
+    background-color: #fcaa;
+  
 }
 h3 {
     font-size: 24px;
@@ -32,7 +33,7 @@ hr {
     margin-top: 20px;
     margin-bottom: 20px;
     border: 0;
-    border-top: 1px solid #eee;
+    border-top: 2px dashed #eee;
 }
 pre {
     display: block;
@@ -41,11 +42,11 @@ pre {
     margin: 0 0 10px;
     font-size: 13px;
     line-height: 1.42857143;
-    color: #333;
+    color: #aaa;
     word-break: break-all;
     word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
+   color: #ffffff;
+    border: 3px dashed #aaa;
     border-radius: 4px;
 }
 
@@ -77,29 +78,31 @@ pre {
 
 /* Buttons */
 button,
+input[type="file"],
 input[type="button"],
 input[type="submit"] {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 5px;
     margin-bottom: 0;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 320;
     line-height: 1.42857143;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
     cursor: pointer;
-    border: 1px solid #ccc;
+    border: 2px solid #ffee;
     border-radius: 4px;
     background-color: #1a11;
     color: #313aaa;
 }
 button:hover,
+      input[type="file"]:hover,
 input[type="button"]:hover,
 input[type="submit"]:hover {
-    background-color: aqua;
+    background-color: #ffaabb;
     border-color: red;
-  border:yellow solid 2px;
+  border:yellow solid 3px;
  
 }
 button:disabled,
@@ -113,10 +116,8 @@ input[type="submit"]:disabled {
 input[type="file"],
 input[type="radio"] {
     line-height: normal;
-  appearance: smooth;
+
   
- color:#313aaa;
-    background-color: #1a11;
     cursor: default;
 }
 input[type="radio"] {
@@ -143,7 +144,7 @@ a:focus {
 }</style>
 </head>
 <body style="padding: 8px;">
-    <h3> | Sid Creative |</h3>
+    <h1> | Sid Creative |</h1>
     
     <hr />
     <div class="row">
@@ -151,14 +152,14 @@ a:focus {
             <div>
                 <div>
                     
-                    Encode: [ <input style="display: inline;" id=input type=file accept="video/mp4,video/x-m4v,video/*"> ] <br> => output.
-                    [
+                    Encode:  <input style="display: inline; ;" id=input type=file accept="video/mp4,video/x-m4v,video/*"> <br>  Output.
+                   
                         <input type="radio" id="outputChoice1" name="output" value="mp4" checked>
-                        <label for="outputChoice1">mp4</label>
+                        <label for="outputChoice1">Mp4</label>
 
                         <input type="radio" id="outputChoice2" name="output" value="webm">
-                        <label for="outputChoice2">webm</label>
-                    ]
+                        <label for="outputChoice2">WEBM</label>
+                  
                 </div>
                 <div>
                     <button id="startButton">Start</button>
@@ -168,8 +169,8 @@ a:focus {
             <hr />
             <div>
                 Developer: <br><button id="testButton">Check Status</button>
-                <button id="devVersionButton"><code>ffmpeg -version</code></button>
-                <button id="devHelpButton"><code>ffmpeg -help</code></button>
+                <button id="devVersionButton"><code> -version</code></button>
+                <button id="devHelpButton"><code> -help</code></button>
                 <button id="devClearButton">Clear</button>
             </div>
             <hr />
@@ -187,7 +188,7 @@ a:focus {
             </div>
         </div>
         <div class="col-sm-6">
-            <pre id="log" style="font-size: 11px; white-space: pre-wrap; overflow-y: scroll; width: 100%; height: 500px; background-color: #222222; color: #cccccc;"></pre>
+            <pre id="log" style="font-size: 11px; white-space: pre-wrap; overflow-y: scroll; width: 100%; height: 500px; background-color: #222222; color: #cccccc;">544</pre>
         </div>
     </div>
 
@@ -199,19 +200,8 @@ a:focus {
 
     class App {
         constructor() {
-            this.thread = null; // to be initialized by onOutputChoiceChanged()
-
-            // [run] ffmpeg -y -i test.webm output.mp4
-            // Stream mapping:
-            //   Stream #0:0 -> #0:0 (vp8 (native) -> h264 (libx264))
-            //   Stream #0:1 -> #0:1 (vorbis (native) -> aac (native))
-
-            // [run] ffmpeg -y -i test.webm output.webm
-            // Stream mapping:
-            //   Stream #0:0 -> #0:0 (vp8 (native) -> vp8 (libvpx))
-            //   Stream #0:1 -> #0:1 (vorbis (native) -> opus (libopus))
-
-            this.initUI();
+            this.thread = null; 
+          this.initUI();
         }
 
         resetThread(type) {
@@ -230,7 +220,6 @@ a:focus {
         static createVideo(buf) {
             const view = new Uint8ClampedArray(buf);
             console.log('view.length:', view.length);
-            // FIXME safari not playing mp4/webm in case of the local server??
             return URL.createObjectURL(new Blob([view]));
         }
 
@@ -280,17 +269,12 @@ a:focus {
         updateVideo(src) {
             this._videoSrc = src;
 
-            // `this.output.src = '';` has been found troublesome...
-            // https://humanwhocodes.com/blog/2009/11/30/empty-image-src-can-destroy-your-site/
-            // https://stackoverflow.com/questions/13726593/how-to-set-image-src-to-empty
-
-            // workaround
-            // https://stackoverflow.com/questions/3258587/how-to-properly-unload-destroy-a-video-element
+          
             this.output.pause();
             if (src !== '') {
                 this.output.setAttribute('src', src);
             } else {
-                this.output.removeAttribute('src'); // empty source
+                this.output.removeAttribute('src'); // 
             }
             this.output.load();
 
@@ -363,20 +347,8 @@ a:focus {
                 this.logLine(`[info] fetching ${fname}`);
 
                 _handleEncode(fname, async () => {
-                    const resp = await fetch(`./test/${fname}`); // vp8 / vorbis
-                    //-------- some random experiments...
-                    // const resp = await fetch(`./test2/ev.mkv`); // h264 / opus
-                    // const resp = await fetch(`./test2/flow.mkv`); // h264 / opus
-                    // const resp = await fetch(`./test2/hdd.flv`); // flv1 / mp3 -- No decoder for stream #0:1, filtering impossible
-                    // const resp = await fetch(`./test2/fish.mov`); // mjpeg -- no output available
-                    // const resp = await fetch(`./test2/hello.mov`); // h264 -- no output available
-                    //--------
-                    // https://unix.stackexchange.com/questions/40638/how-to-do-i-convert-an-animated-gif-to-an-mp4-or-mv4-on-the-command-line
-                    // $ ffmpeg -i giphy.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" giphy.mp4
-                    // const resp = await fetch(`./test2/giphy.gif`); // Invalid data found when processing input; no output available
-                    // const resp = await fetch(`./test2/giphy.mp4`); // ok
-                    //--------
-                    return await resp.arrayBuffer();
+                    const resp = await fetch(`./test/${fname}`); 
+                return await resp.arrayBuffer();
                 }, estimate);
             });
 
@@ -394,10 +366,9 @@ a:focus {
             });
 
             this.buttons['devClearButton'].addEventListener('click', e => {
-                // clear video
                 this.updateVideo('');
 
-                // clear log
+             
                 this.logClear();
                 this.logLine(`[info] log cleared`);
             });
